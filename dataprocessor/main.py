@@ -266,10 +266,14 @@ for pet in pets:
                 animal["nome"] for animal in pets if pet["especie"] == animal["especie"]
             ],
             "Mais de 10 Kg": [
-                animal["nome"] for animal in pets if pet["especie"] == animal["especie"] and animal['peso'] > 10
+                animal["nome"]
+                for animal in pets
+                if pet["especie"] == animal["especie"] and animal["peso"] > 10
             ],
             "Menos de 10 Kg": [
-                animal["nome"] for animal in pets if pet["especie"] == animal["especie"] and animal['peso'] < 10
+                animal["nome"]
+                for animal in pets
+                if pet["especie"] == animal["especie"] and animal["peso"] < 10
             ],
         }
     else:
@@ -304,7 +308,9 @@ for pedido in pedidos:
         cidades_pedidos[cidade][pedido["status"]] += 1
 
 for cidade in cidades_pedidos:
-    print(f"Em {cidade}, foram {cidades_pedidos[cidade]['entregue']} entregues e {cidades_pedidos[cidade]['pendente']} pendentes.")
+    print(
+        f"Em {cidade}, foram {cidades_pedidos[cidade]['entregue']} entregues e {cidades_pedidos[cidade]['pendente']} pendentes."
+    )
 
 
 print("\n# 05:")
@@ -339,7 +345,9 @@ for aluno in alunos:
 
 for turma in sorted(turmas):
     media = sum(turmas[turma]["Notas"]) / len(turmas[turma]["Notas"])
-    print(f"Turma {turma} tem os alunos: {', '.join(turmas[turma]['Nomes'])} e média de notas de: {media:.2f}.")
+    print(
+        f"Turma {turma} tem os alunos: {', '.join(turmas[turma]['Nomes'])} e média de notas de: {media:.2f}."
+    )
 
 for categoria in categorias_nota:
     print(f"{categoria}: {', '.join(categorias_nota[categoria])}")
@@ -367,7 +375,7 @@ for t in transacoes:
     tipo = t["tipo"]
     cat = t["categoria"]
     valor = t["valor"]
-    
+
     if not por_tipo.get(tipo):
         por_tipo[tipo] = valor
     else:
@@ -377,7 +385,7 @@ for t in transacoes:
         por_categoria[cat] = valor
     else:
         por_categoria[cat] += valor
-        
+
     chave_combo = f"{tipo} - {cat}"
     if not por_combinacao.get(chave_combo):
         por_combinacao[chave_combo] = valor
@@ -396,16 +404,66 @@ for combo in por_combinacao:
 
 print("\n# 07:")
 filmes = [
-    {"titulo": "Aventura Final", "genero": "Ação", "classificacao": "14", "duracao": 130},
-    {"titulo": "Risos em Dobro", "genero": "Comédia", "classificacao": "10", "duracao": 95},
-    {"titulo": "Noite de Mistério", "genero": "Suspense", "classificacao": "16", "duracao": 110},
-    {"titulo": "Coração em Cena", "genero": "Romance", "classificacao": "12", "duracao": 125},
-    {"titulo": "Missão Oceânica", "genero": "Ação", "classificacao": "12", "duracao": 118},
-    {"titulo": "Férias Malucas", "genero": "Comédia", "classificacao": "Livre", "duracao": 102},
-    {"titulo": "Segredos da Cidade", "genero": "Suspense", "classificacao": "14", "duracao": 140},
-    {"titulo": "Destino de Verão", "genero": "Romance", "classificacao": "10", "duracao": 98},
-    {"titulo": "Heróis do Amanhã", "genero": "Ação", "classificacao": "14", "duracao": 145},
-    {"titulo": "Amigos do Bairro", "genero": "Comédia", "classificacao": "Livre", "duracao": 88},
+    {
+        "titulo": "Aventura Final",
+        "genero": "Ação",
+        "classificacao": "14",
+        "duracao": 130,
+    },
+    {
+        "titulo": "Risos em Dobro",
+        "genero": "Comédia",
+        "classificacao": "10",
+        "duracao": 95,
+    },
+    {
+        "titulo": "Noite de Mistério",
+        "genero": "Suspense",
+        "classificacao": "16",
+        "duracao": 110,
+    },
+    {
+        "titulo": "Coração em Cena",
+        "genero": "Romance",
+        "classificacao": "12",
+        "duracao": 125,
+    },
+    {
+        "titulo": "Missão Oceânica",
+        "genero": "Ação",
+        "classificacao": "12",
+        "duracao": 118,
+    },
+    {
+        "titulo": "Férias Malucas",
+        "genero": "Comédia",
+        "classificacao": "Livre",
+        "duracao": 102,
+    },
+    {
+        "titulo": "Segredos da Cidade",
+        "genero": "Suspense",
+        "classificacao": "14",
+        "duracao": 140,
+    },
+    {
+        "titulo": "Destino de Verão",
+        "genero": "Romance",
+        "classificacao": "10",
+        "duracao": 98,
+    },
+    {
+        "titulo": "Heróis do Amanhã",
+        "genero": "Ação",
+        "classificacao": "14",
+        "duracao": 145,
+    },
+    {
+        "titulo": "Amigos do Bairro",
+        "genero": "Comédia",
+        "classificacao": "Livre",
+        "duracao": 88,
+    },
 ]
 
 generos_filmes = {}
@@ -414,12 +472,12 @@ classificacoes_filmes = {}
 for filme in filmes:
     gen = filme["genero"]
     cls = filme["classificacao"]
-    
+
     if not generos_filmes.get(gen):
         generos_filmes[gen] = {
             "Titulos": [filme["titulo"]],
             "Mais de 120 min": [filme["titulo"]] if filme["duracao"] > 120 else [],
-            "120 min ou menos": [filme["titulo"]] if filme["duracao"] <= 120 else []
+            "120 min ou menos": [filme["titulo"]] if filme["duracao"] <= 120 else [],
         }
     else:
         generos_filmes[gen]["Titulos"].append(filme["titulo"])
@@ -433,11 +491,90 @@ for filme in filmes:
         classificacoes_filmes[cls].append(filme["duracao"])
 
 for gen in generos_filmes:
-    print(f"Gênero {gen} possui os filmes: {', '.join(generos_filmes[gen]['Titulos'])}.")
-    print(f"Mais de 120 min: {', '.join(generos_filmes[gen]['Mais de 120 min']) or 'Nenhum'}")
-    print(f"120 min ou menos: {', '.join(generos_filmes[gen]['120 min ou menos']) or 'Nenhum'}")
+    print(
+        f"Gênero {gen} possui os filmes: {', '.join(generos_filmes[gen]['Titulos'])}."
+    )
+    print(
+        f"Mais de 120 min: {', '.join(generos_filmes[gen]['Mais de 120 min']) or 'Nenhum'}"
+    )
+    print(
+        f"120 min ou menos: {', '.join(generos_filmes[gen]['120 min ou menos']) or 'Nenhum'}"
+    )
 
 print()
 for cls in classificacoes_filmes:
     media_duracao = sum(classificacoes_filmes[cls]) / len(classificacoes_filmes[cls])
-    print(f"Classificação Indicativa {cls} tem duração média de: {media_duracao:.1f} minutos.")
+    print(
+        f"Classificação Indicativa {cls} tem duração média de: {media_duracao:.1f} minutos."
+    )
+
+## Aula 03
+print("\n\n")
+print("###   Aula 03")
+
+from leitor import carregar_clientes, carregar_transacoes, carregar_config
+
+clientes = carregar_clientes("data/clientes.csv")
+transacoes = carregar_transacoes("data/transacoes.csv")
+config = carregar_config("data/config.json")
+
+print(f"Clientes carregados: {len(clientes)}")
+print(f"Transações carregadas: {len(transacoes)}")
+print(f"Configuração: {config}")
+print()
+print("## Desafio Guiado:")
+import csv
+
+
+def carregar_clientes(caminho):
+    def converter_inteiro(v, pad=None):
+        try:
+            return int(v)
+        except (ValueError, TypeError):
+            return pad
+
+    clientes = []
+    with open(caminho, encoding="utf-8") as arquivo:
+        leitor = csv.DictReader(arquivo)
+        for linha in leitor:
+            cliente = {
+                "id": converter_inteiro(linha["id"]),
+                "nome": linha["nome"].strip(),
+                "email": linha["email"].strip(),
+                "idade": converter_inteiro(linha["idade"]),
+                "cidade": linha["cidade"].strip(),
+                "data_cadastro": linha["data_cadastro"].strip(),
+            }
+            clientes.append(cliente)
+    return clientes
+
+
+clientes = carregar_clientes("data/clientes.csv")
+
+for cliente in clientes:
+    print(
+        f"ID {cliente['id']} | {cliente['nome']} | {cliente['email']} | {cliente['idade']} | {cliente['cidade']}"
+    )
+print()
+print("## Desafio Extra:")
+print("=== Relatório Inicial ===")
+print(f"Clientes carregados: {len(clientes)}")
+print(f"Transações carregados: {len(transacoes)}")
+if config:
+    print(f"Configurações carregadas: OK")
+else:
+    print(f"Configurações carregadas: ERROR")
+print()
+print(f"Categorias configuradas: {', '.join(config['categorias_validas'])}")
+print(f"Status configurado: {', '.join(config['status_validos'])}")
+print()
+print(f"Clientes por cidade:")
+cidades = [cliente["cidade"] for cliente in clientes]
+cidades_set = set(cidades)
+for cidade in cidades_set:
+    print(f"    {cidade}: {cidades.count(cidade)}")
+print()
+print(f"Transações por status:")
+statuses = [transacao["status"] for transacao in transacoes]
+for status in config["status_validos"]:
+    print(f"    {status}: {statuses.count(status)}")
