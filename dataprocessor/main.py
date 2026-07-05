@@ -578,3 +578,63 @@ print(f"Transações por status:")
 statuses = [transacao["status"] for transacao in transacoes]
 for status in config["status_validos"]:
     print(f"    {status}: {statuses.count(status)}")
+
+
+## Aula 04
+print("\n\n")
+print("###   Aula 04")
+
+from leitor import carregar_clientes, carregar_transacoes, carregar_config
+from validador import validar_cliente, validar_transacao, separar_registros
+
+clientes = carregar_clientes("data/clientes.csv")
+transacoes = carregar_transacoes("data/transacoes.csv")
+config = carregar_config("data/config.json")
+
+clientes_validos, clientes_invalidos = separar_registros(clientes, validar_cliente)
+
+ids_clientes_validos = {c["id"] for c in clientes_validos}
+
+transacoes_validas, transacoes_invalidas = separar_registros(
+    transacoes, validar_transacao, ids_clientes=ids_clientes_validos, config=config
+)
+
+print(f"Clientes válidos: {len(clientes_validos)}")
+print(f"Clientes inválidos: {len(clientes_invalidos)}")
+print(f"Transações válidas: {len(transacoes_validas)}")
+print(f"Transações inválidas: {len(transacoes_invalidas)}")
+print()
+print("## Desafio Guiado:")
+validos, invalidos = separar_registros(clientes, validar_cliente)
+
+cliente_classificados = validos + invalidos
+
+print("=== VALIDAÇÃO DE CLIENTES ===")
+for cliente in cliente_classificados:
+    if cliente.get("erros"):
+        print(
+            f"[INVÁLIDO] ID {cliente['registro']['id']} — {cliente['registro']['nome']}: {', '.join(cliente['erros'])}"
+        )
+    else:
+        print(f"[OK] ID {cliente['id']} — {cliente['nome']}")
+print()
+print(f"Resultado: {len(validos)} válidos, {len(invalidos)} inválidos")
+print()
+print("## Desafio Guiado:")
+ids_clientes = {c["id"] for c in validos}
+validos, invalidos = separar_registros(
+    transacoes, validar_transacao, ids_clientes=ids_clientes, config=config
+)
+
+transacoes_classificadas = validos + invalidos
+
+print("=== VALIDAÇÃO DE TRANSAÇÃO ===")
+for transacao in transacoes_classificadas:
+    if transacao.get("erros"):
+        print(
+            f"[INVÁLIDO] ID {transacao['registro']['id']} —  cliente {transacao['registro']['cliente_id']}: {', '.join(transacao['erros'])}"
+        )
+    else:
+        print(f"[OK] ID {transacao['id']} — cliente {transacao['cliente_id']} | R$ {transacao['valor']} | {transacao['categoria']} | {transacao['status']}")
+print()
+print(f"Resultado: {len(validos)} válidas, {len(invalidos)} inválidas")
