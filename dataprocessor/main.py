@@ -635,6 +635,101 @@ for transacao in transacoes_classificadas:
             f"[INVÁLIDO] ID {transacao['registro']['id']} —  cliente {transacao['registro']['cliente_id']}: {', '.join(transacao['erros'])}"
         )
     else:
-        print(f"[OK] ID {transacao['id']} — cliente {transacao['cliente_id']} | R$ {transacao['valor']} | {transacao['categoria']} | {transacao['status']}")
+        print(
+            f"[OK] ID {transacao['id']} — cliente {transacao['cliente_id']} | R$ {transacao['valor']} | {transacao['categoria']} | {transacao['status']}"
+        )
 print()
 print(f"Resultado: {len(validos)} válidas, {len(invalidos)} inválidas")
+
+
+## Aula 05
+print("\n\n")
+print("###   Aula 05")
+# main.py
+from leitor import carregar_clientes, carregar_transacoes, carregar_config
+from validador import validar_cliente, validar_transacao, separar_registros
+from transformador import transformar_clientes, transformar_transacoes
+
+# --- LEITURA ---
+clientes_raw = carregar_clientes("data/clientes.csv")
+transacoes_raw = carregar_transacoes("data/transacoes.csv")
+config = carregar_config("data/config.json")
+
+# --- VALIDAÇÃO ---
+clientes_validos, clientes_invalidos = separar_registros(clientes_raw, validar_cliente)
+ids_validos = {c["id"] for c in clientes_validos}
+
+transacoes_validas, transacoes_invalidas = separar_registros(
+    transacoes_raw, validar_transacao, ids_clientes=ids_validos, config=config
+)
+
+# --- TRANSFORMAÇÃO ---
+clientes = transformar_clientes(clientes_validos)
+transacoes = transformar_transacoes(transacoes_validas)
+
+# --- RESUMO ---
+print("=== DataProcessor ===")
+print(f"Clientes: {len(clientes)} válidos, {len(clientes_invalidos)} inválidos")
+print(f"Transações: {len(transacoes)} válidas, {len(transacoes_invalidas)} inválidas")
+print()
+print("Clientes normalizados:")
+for c in clientes:
+    print(f"  {c['nome']} | {c['email']} | {c['cidade']}")
+print()
+
+print("## Desafio Guiado:")
+
+
+print("=== TRANSFORMAÇÃO ===")
+for antes, depois in zip(clientes_validos, clientes):
+    print("ANTES:")
+    print(
+        f'     nome: "{antes.get("nome")}" | email: "{antes.get("email")}" | cidade: "{antes.get("cidade")}"'
+    )
+    print("DEPOIS:")
+    print(
+        f'     nome: "{depois["nome"]}" | email: "{depois["email"]}" | cidade: "{depois["cidade"]}"'
+    )
+    print()
+print("## Desafio Extra:")
+print("=== RELATÓRIO FINAL — DataProcessor ===")
+print()
+print(f"CLIENTES PROCESSADOS ({len(clientes)} válidos de {len(clientes_raw)})")
+for c in clientes:
+    print(
+        f"  ID {c['id']} | {c['nome']} | {c['email']} | {c['idade']} anos | {c['cidade']}"
+    )
+print()
+print(f"CLIENTES REJEITADOS ({len(clientes_invalidos)})")
+for item in clientes_invalidos:
+    reg = item["registro"]
+    erros_str = ", ".join(item["erros"])
+    print(f"  ID {reg['id']} — {reg['nome']}: {erros_str}")
+print()
+print(f"TRANSAÇÕES PROCESSADAS ({len(transacoes)} válidas de {len(transacoes_raw)})")
+for t in transacoes:
+    print(
+        f"  ID {t['id']} | cliente {t['cliente_id']} | R$ {t['valor']:.2f} | {t['categoria']} | {t['status']}"
+    )
+print()
+print(f"TRANSAÇÕES REJEITADAS ({len(transacoes_invalidas)})")
+for item in transacoes_invalidas:
+    reg = item["registro"]
+    erros_str = ", ".join(item["erros"])
+    print(f"  ID {reg['id']} — {erros_str}")
+print()
+from processador import total_aprovado, media_idade
+
+total_aprov = total_aprovado(transacoes)
+media_id = media_idade(clientes)
+print("MÉTRICAS")
+print(
+    f"  Total aprovado: R$ {total_aprov:.2f}"
+    if total_aprov
+    else "  Total aprovado: R$ 0.00"
+)
+print(
+    f"  Média de idade (válidos): {media_id:.1f}"
+    if media_id
+    else "  Média de idade (válidos): 0.0"
+)
