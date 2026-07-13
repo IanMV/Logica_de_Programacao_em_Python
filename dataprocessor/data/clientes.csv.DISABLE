@@ -1,0 +1,6 @@
+id,nome,email,idade,cidade,data_cadastro
+1, JOÃO Silva   ,   Joao.silva@email.com   ,34,JOINVILLE,2023-01-10
+2,Maria souza,maria@email,28,Florianopolis,2023-02-15
+3,Carlos Pereira,carlos.pereira@email.com,-5,Curitiba,2023-03-20
+4,   ana lima ,  ana.lima@email.com,45,JoinviLLE,2023-01-25
+5,Pedro Santos,,38,Sao Paulo,2023-02-30
